@@ -17,7 +17,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "RecommendationRequest")
+@Entity(name = "recommendationrequests")
 public class RecommendationRequest {
   @Id
   private long id;

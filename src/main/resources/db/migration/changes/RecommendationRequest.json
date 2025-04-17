@@ -2,7 +2,7 @@
     "databaseChangeLog": [
       {
         "changeSet": {
-          "id": "RecommendationRequest-1",
+          "id": "recommendationrequests-1",
           "author": "ChloeA",
           "preConditions": [
             {
@@ -12,7 +12,7 @@
               "not": [
                 {
                   "tableExists": {
-                    "tableName": "RecommendationRequest"
+                    "tableName": "recommendationrequests"
                   }
                 }
               ]
@@ -27,7 +27,7 @@
                       "autoIncrement": true,
                       "constraints": {
                         "primaryKey": true,
-                        "primaryKeyName": "RecommendationRequest_PK"
+                        "primaryKeyName": "RECOMMENDATIONREQUESTS_PK"
                       },
                       "name": "ID",
                       "type": "BIGINT"
@@ -47,7 +47,7 @@
                   },
                   {
                     "column": {
-                      "name": "EXPLAINATION",
+                      "name": "EXPLANATION",
                       "type": "VARCHAR(255)"
                     }
                   },
@@ -70,7 +70,7 @@
                         }
                     }
                 ],
-                "tableName": "RecommendationRequest"
+                "tableName": "recommendationrequests"
               }
             }
           ]
