@@ -6,9 +6,6 @@
           "author": "ChloeA",
           "preConditions": [
             {
-              "onFail": "MARK_RAN"
-            },
-            {
               "not": [
                 {
                   "tableExists": {
