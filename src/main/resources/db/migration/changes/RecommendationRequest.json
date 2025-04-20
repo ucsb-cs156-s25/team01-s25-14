@@ -3,7 +3,7 @@
       {
         "changeSet": {
           "id": "RecommendationRequest-1",
-          "author": "ChloeA",
+          "author": "Chloe",
           "preConditions": [
             {
               "not": [
