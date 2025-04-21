@@ -76,4 +76,15 @@ public class RecommendationRequestController extends ApiController {
 
         return savedRecommendationRequest;
     }
+
+    // Get a single record from the table; use the value passed in as a @RequestParam to do a lookup by id. 
+    // If a matching row is found, return the row as a JSON object, 
+    // otherwise throw an EntityNotFoundException.
+    @GetMapping("")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public RecommendationRequest getById(@RequestParam Long id) {
+        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
+        return recommendationRequest;
+    }
 }
