@@ -41,16 +41,13 @@ public class RecommendationRequestController extends ApiController {
     @Autowired
     RecommendationRequestRepository recommendationRequestRepository;
 
-    @Operation(summary = "List all recommendation requests")
-    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all") // get all records in the table and return as a JSON array
+    @PreAuthorize("hasRole('ROLE_USER')")
     public Iterable<RecommendationRequest> allRecommendationRequests() {
         Iterable<RecommendationRequest> requests = recommendationRequestRepository.findAll();
         return requests;
     }
 
-    @Operation(summary = "Create a new recommendation request")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/post") // Use the data in the input parameters to create a new row in the table and return the data as JSON
     public RecommendationRequest postRecommendationRequest(
             @Parameter(name="requesterEmail") @RequestParam String requesterEmail,

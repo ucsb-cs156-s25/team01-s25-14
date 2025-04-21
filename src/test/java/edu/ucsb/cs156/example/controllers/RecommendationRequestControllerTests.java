@@ -35,75 +35,110 @@ import static org.mockito.Mockito.when;
 @WebMvcTest(controllers = RecommendationRequestController.class)
 @Import(TestConfig.class)
 public class RecommendationRequestControllerTests extends ControllerTestCase {
-        @MockBean
-        RecommendationRequestRepository recommendationRequestRepository;
-        @MockBean
-        UserRepository userRepository;
+    @MockBean
+    RecommendationRequestRepository recommendationRequestRepository;
+    @MockBean
+    UserRepository userRepository;
 
-        // Tests for GET /api/recommendation-requests/all: Test that logged-out users cannot access and logged-in users can access
-        @Test
-        public void logged_out_users_cannot_get_all() throws Exception {
+    // Authorization tests for /api/recommendation-requests/all
+    @Test
+    public void logged_out_users_cannot_get_all() throws Exception {
             mockMvc.perform(get("/api/recommendation-requests/all"))
-                    .andExpect(status().is(403)); // logged out users can't get all
-        }
+                            .andExpect(status().is(403)); // logged out users can't get all
+    }
 
-        @WithMockUser(roles = { "USER" })
-        @Test
-        public void logged_in_users_can_get_all() throws Exception {
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void logged_in_users_can_get_all() throws Exception {
             mockMvc.perform(get("/api/recommendation-requests/all"))
-                    .andExpect(status().is(200)); // logged
-        }
+                            .andExpect(status().is(200)); // logged
+    }
 
-        // POST tests for /api/recommendation-requests/post: Test that logged-out users cannot post and logged-in users can post
-        @Test
-        public void logged_out_users_cannot_post() throws Exception {
-            mockMvc.perform(post("/api/recommendation-requests/post"))
-                    .andExpect(status().is(403));
-        }
+    // Authorization tests for /api/recommendation-requests/post
 
-        @WithMockUser(roles = { "USER" })
-        @Test
-        public void logged_in_regular_users_cannot_post() throws Exception {
+    @Test
+    public void logged_out_users_cannot_post() throws Exception {
             mockMvc.perform(post("/api/recommendation-requests/post"))
-                    .andExpect(status().is(403)); // only admins can post
-        }
-        
-        @WithMockUser(roles = { "ADMIN", "USER" })
-        @Test
-        public void an_admin_user_can_post_a_new_recommendation_request() throws Exception {
+                            .andExpect(status().is(403));
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void logged_in_regular_users_cannot_post() throws Exception {
+            mockMvc.perform(post("/api/recommendation-requests/post"))
+                            .andExpect(status().is(403)); // only admins can post
+    }
+
+    // Tests with mocks for database actions
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void logged_in_user_can_get_all_recommendation_requests() throws Exception {
             // arrange
-            LocalDateTime dateRequested = LocalDateTime.parse("2025-06-01T10:00:00");
-            LocalDateTime dateNeeded = LocalDateTime.parse("2025-06-10T10:00:00");
+            LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
 
-            RecommendationRequest rr = RecommendationRequest.builder()
-                .requesterEmail("student@example.edu")
-                .professorEmail("prof@example.edu")
-                .explanation("Need one for grad school")
-                .dateRequested(dateRequested)
-                .dateNeeded(dateNeeded)
-                .done(false)
-                .build();
+            RecommendationRequest recommendationRequest1 = RecommendationRequest.builder()
+                            .requesterEmail("student1@ucsb.edu")
+                            .professorEmail("prof1@ucsb.edu")
+                            .explanation("grad program")
+                            .dateRequested(ldt1)
+                            .dateNeeded(ldt1.plusDays(5))
+                            .done(false)
+                            .build();
 
-            when(recommendationRequestRepository.save(any())).thenReturn(rr);
+            LocalDateTime ldt2 = LocalDateTime.parse("2022-03-11T00:00:00");
+
+            RecommendationRequest recommendationRequest2 = RecommendationRequest.builder()
+                            .requesterEmail("student2@ucsb.edu")
+                            .professorEmail("prof2@ucsb.edu")
+                            .explanation("grad program")
+                            .dateRequested(ldt2)
+                            .dateNeeded(ldt2.plusDays(5))
+                            .done(false)
+                            .build();
+
+            ArrayList<RecommendationRequest> expectedRecommendationRequests = new ArrayList<>();
+            expectedRecommendationRequests.addAll(Arrays.asList(recommendationRequest1, recommendationRequest2));
+
+            when(recommendationRequestRepository.findAll()).thenReturn(expectedRecommendationRequests);
+
+            // act
+            MvcResult response = mockMvc.perform(get("/api/recommendation-requests/all"))
+                            .andExpect(status().isOk()).andReturn();
+
+            // assert
+            verify(recommendationRequestRepository, times(1)).findAll();
+            String expectedJson = mapper.writeValueAsString(expectedRecommendationRequests);
+            String responseString = response.getResponse().getContentAsString();
+            assertEquals(expectedJson, responseString);
+    }
+
+    @WithMockUser(roles = { "ADMIN", "USER" })
+    @Test
+    public void an_admin_user_can_post_a_new_recommendation_request() throws Exception {
+            // arrange
+            LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
+
+            RecommendationRequest recommendationRequest1 = RecommendationRequest.builder()
+                            .requesterEmail("student1@ucsb.edu")
+                            .professorEmail("prof1@ucsb.edu")
+                            .explanation("grad program")
+                            .dateRequested(ldt1)
+                            .dateNeeded(ldt1.plusDays(5))
+                            .done(false)
+                            .build();
+
+            when(recommendationRequestRepository.save(eq(recommendationRequest1))).thenReturn(recommendationRequest1);
 
             // act
             MvcResult response = mockMvc.perform(
-                post("/api/recommendation-requests/post")
-                    .param("requesterEmail", "student@example.edu")
-                    .param("professorEmail", "prof@example.edu")
-                    .param("explanation", "Need one for grad school")
-                    .param("dateRequested", "2025-06-01T10:00:00")
-                    .param("dateNeeded", "2025-06-10T10:00:00")
-                    .param("done", "false")
-                    .with(csrf()))
-                .andExpect(status().isOk())
-                .andReturn();
+                            post("/api/recommendation-requests/post?requesterEmail=student1@ucsb.edu&professorEmail=prof1@ucsb.edu&explanation=grad program&dateRequested=2022-01-03T00:00:00&dateNeeded=2022-01-08T00:00:00&done=false")
+                                            .with(csrf()))
+                            .andExpect(status().isOk()).andReturn();
 
             // assert
-            verify(recommendationRequestRepository, times(1)).save(any());
-            String expectedJson = mapper.writeValueAsString(rr);
+            verify(recommendationRequestRepository, times(1)).save(recommendationRequest1);
+            String expectedJson = mapper.writeValueAsString(recommendationRequest1);
             String responseString = response.getResponse().getContentAsString();
             assertEquals(expectedJson, responseString);
-        }
-
+    }
 }
