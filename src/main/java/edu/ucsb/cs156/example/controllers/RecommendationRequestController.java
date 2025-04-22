@@ -76,4 +76,29 @@ public class RecommendationRequestController extends ApiController {
 
         return savedRecommendationRequest;
     }
+
+    // Get a single record from the table; 
+    // use the value passed in as a @RequestParam to do a lookup by id. 
+    // If a matching row is found, update that row with values passed in as a JSON object. 
+    // If a matching row is not found, throw an EntityNotFoundException.
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("")
+    public RecommendationRequest updateRecommendationRequest(
+            @Parameter(name="id") @RequestParam Long id,
+            @RequestBody @Valid RecommendationRequest incoming) {
+
+        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
+
+        recommendationRequest.setRequesterEmail(incoming.getRequesterEmail());
+        recommendationRequest.setProfessorEmail(incoming.getProfessorEmail());
+        recommendationRequest.setExplanation(incoming.getExplanation());
+        recommendationRequest.setDateRequested(incoming.getDateRequested());
+        recommendationRequest.setDateNeeded(incoming.getDateNeeded());
+        recommendationRequest.setDone(incoming.getDone());
+
+        recommendationRequestRepository.save(recommendationRequest);
+
+        return recommendationRequest;
+    }
 }
