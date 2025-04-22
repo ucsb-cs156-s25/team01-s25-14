@@ -41,6 +41,7 @@ public class RecommendationRequestController extends ApiController {
     @Autowired
     RecommendationRequestRepository recommendationRequestRepository;
 
+    @Operation(summary = "Get all recommendation requests")
     @GetMapping("/all") // get all records in the table and return as a JSON array
     @PreAuthorize("hasRole('ROLE_USER')")
     public Iterable<RecommendationRequest> allRecommendationRequests() {
@@ -48,6 +49,7 @@ public class RecommendationRequestController extends ApiController {
         return requests;
     }
 
+    @Operation(summary = "Create a new recommendation request")
     @PostMapping("/post") // Use the data in the input parameters to create a new row in the table and return the data as JSON
     public RecommendationRequest postRecommendationRequest(
             @Parameter(name="requesterEmail") @RequestParam String requesterEmail,
@@ -81,6 +83,8 @@ public class RecommendationRequestController extends ApiController {
     // use the value passed in as a @RequestParam to do a lookup by id. 
     // If a matching row is found, update that row with values passed in as a JSON object. 
     // If a matching row is not found, throw an EntityNotFoundException.
+    @Operation(summary = "Update a single recommendation request")
+    @Parameter(name="id", description="the id of the recommendation request to update", required = true)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("")
     public RecommendationRequest updateRecommendationRequest(
