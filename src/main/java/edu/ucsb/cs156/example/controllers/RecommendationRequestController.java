@@ -76,6 +76,17 @@ public class RecommendationRequestController extends ApiController {
 
         return savedRecommendationRequest;
     }
+    
+    @Operation(
+        summary = "Get a single RecommendationRequest by id")
+    @Parameter(name = "id", description = "The id of the RecommendationRequest to retrieve", required = true)
+    @GetMapping("")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public RecommendationRequest getById(@RequestParam Long id) {
+        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
+        return recommendationRequest;
+    }
 
     @Operation(summary= "Delete a Recommendation Request")
     @Parameter(name="id", description="the id of the recommendation request to delete", required = true)
@@ -89,5 +100,4 @@ public class RecommendationRequestController extends ApiController {
         recommendationRequestRepository.delete(recommendationRequest);
         return genericMessage("RecommendationRequest with id %s deleted".formatted(id));
     }
-
 }
