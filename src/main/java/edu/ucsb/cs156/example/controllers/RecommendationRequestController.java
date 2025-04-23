@@ -80,7 +80,7 @@ public class RecommendationRequestController extends ApiController {
         return savedRecommendationRequest;
     }
     
-
+  
     @Operation(summary = "Get a single RecommendationRequest by id")
     @Parameter(name = "id", description = "The id of the RecommendationRequest to retrieve", required = true)
     @GetMapping("")
@@ -104,7 +104,7 @@ public class RecommendationRequestController extends ApiController {
         recommendationRequestRepository.delete(recommendationRequest);
         return genericMessage("RecommendationRequest with id %s deleted".formatted(id));
     }
-
+  
 
     @Operation(summary = "Update a single recommendation request")
     @Parameter(name="id", description="the id of the recommendation request to update", required = true)
@@ -128,7 +128,4 @@ public class RecommendationRequestController extends ApiController {
 
         return recommendationRequest;
     }
-
-
-    
 }

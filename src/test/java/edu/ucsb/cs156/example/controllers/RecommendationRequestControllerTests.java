@@ -242,7 +242,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
                 assertEquals("RecommendationRequest with id 15 not found", json.get("message"));
         }
 
-                @WithMockUser(roles = { "ADMIN", "USER" })
+        @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
         public void admin_can_edit_an_existing_recommendation_request() throws Exception {
                 // arrange
