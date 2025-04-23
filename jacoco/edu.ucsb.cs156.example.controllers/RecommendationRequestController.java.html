@@ -76,5 +76,19 @@ import java.time.LocalDateTime;
 
 <span class="fc" id="L77">        return savedRecommendationRequest;</span>
     }
+
+    @Operation(summary= &quot;Delete a Recommendation Request&quot;)
+    @Parameter(name=&quot;id&quot;, description=&quot;the id of the recommendation request to delete&quot;, required = true)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @DeleteMapping(&quot;&quot;)
+    public Object deleteRecommendationRequest(
+            @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
+<span class="fc" id="L86">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
+<span class="fc" id="L87">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
+
+<span class="fc" id="L89">        recommendationRequestRepository.delete(recommendationRequest);</span>
+<span class="fc" id="L90">        return genericMessage(&quot;RecommendationRequest with id %s deleted&quot;.formatted(id));</span>
+    }
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
