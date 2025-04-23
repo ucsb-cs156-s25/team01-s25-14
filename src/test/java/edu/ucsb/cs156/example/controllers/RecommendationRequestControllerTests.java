@@ -326,7 +326,6 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
         public void admin_can_update_text_field_in_recommendation_request() throws Exception {
-        
         // Arrange
         LocalDateTime ldt = LocalDateTime.parse("2022-01-03T00:00:00");
 
@@ -369,5 +368,4 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
         String responseString = response.getResponse().getContentAsString();
         assertEquals(requestBody, responseString);
         }
-
 }
