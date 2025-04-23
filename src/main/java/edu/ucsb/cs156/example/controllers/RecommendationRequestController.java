@@ -76,15 +76,28 @@ public class RecommendationRequestController extends ApiController {
 
         return savedRecommendationRequest;
     }
-
-    // Get a single record from the table; use the value passed in as a @RequestParam to do a lookup by id. 
-    // If a matching row is found, return the row as a JSON object, 
-    // otherwise throw an EntityNotFoundException.
+    
+    @Operation(
+        summary = "Get a single RecommendationRequest by id")
+    @Parameter(name = "id", description = "The id of the RecommendationRequest to retrieve", required = true)
     @GetMapping("")
     @PreAuthorize("hasRole('ROLE_USER')")
     public RecommendationRequest getById(@RequestParam Long id) {
         RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
         return recommendationRequest;
+    }
+
+    @Operation(summary= "Delete a Recommendation Request")
+    @Parameter(name="id", description="the id of the recommendation request to delete", required = true)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("")
+    public Object deleteRecommendationRequest(
+            @Parameter(name="id") @RequestParam Long id) {
+        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
+
+        recommendationRequestRepository.delete(recommendationRequest);
+        return genericMessage("RecommendationRequest with id %s deleted".formatted(id));
     }
 }
