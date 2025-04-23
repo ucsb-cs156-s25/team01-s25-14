@@ -76,6 +76,17 @@ import java.time.LocalDateTime;
 
 <span class="fc" id="L77">        return savedRecommendationRequest;</span>
     }
+    
+    @Operation(
+        summary = &quot;Get a single RecommendationRequest by id&quot;)
+    @Parameter(name = &quot;id&quot;, description = &quot;The id of the RecommendationRequest to retrieve&quot;, required = true)
+    @GetMapping(&quot;&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
+    public RecommendationRequest getById(@RequestParam Long id) {
+<span class="fc" id="L86">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
+<span class="fc" id="L87">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
+<span class="fc" id="L88">        return recommendationRequest;</span>
+    }
 
     @Operation(summary= &quot;Delete a Recommendation Request&quot;)
     @Parameter(name=&quot;id&quot;, description=&quot;the id of the recommendation request to delete&quot;, required = true)
@@ -83,12 +94,11 @@ import java.time.LocalDateTime;
     @DeleteMapping(&quot;&quot;)
     public Object deleteRecommendationRequest(
             @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
-<span class="fc" id="L86">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
-<span class="fc" id="L87">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
+<span class="fc" id="L97">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
+<span class="fc" id="L98">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
 
-<span class="fc" id="L89">        recommendationRequestRepository.delete(recommendationRequest);</span>
-<span class="fc" id="L90">        return genericMessage(&quot;RecommendationRequest with id %s deleted&quot;.formatted(id));</span>
+<span class="fc" id="L100">        recommendationRequestRepository.delete(recommendationRequest);</span>
+<span class="fc" id="L101">        return genericMessage(&quot;RecommendationRequest with id %s deleted&quot;.formatted(id));</span>
     }
-
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
