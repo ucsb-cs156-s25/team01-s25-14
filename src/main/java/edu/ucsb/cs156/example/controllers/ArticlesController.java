@@ -94,6 +94,7 @@ public class ArticlesController extends ApiController {
         return savedArticle;
     }
 
+
     /**
      * Get a single article by id
      * 
@@ -162,8 +163,6 @@ public class ArticlesController extends ApiController {
         articlesRepository.delete(article);
         return genericMessage("Articles with id %s deleted".formatted(id));
     }
-
-
 
 
 }
