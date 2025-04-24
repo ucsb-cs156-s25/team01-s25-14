@@ -144,4 +144,63 @@ public class ArticlesControllerTests extends ControllerTestCase {
     }
 
 
+
+    @Test
+    public void logged_out_users_cannot_get_by_id() throws Exception {
+            mockMvc.perform(get("/api/articles?id=7"))
+                    .andExpect(status().is(403)); // logged out users can't get by id
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void test_that_logged_in_user_can_get_by_id_when_the_id_does_not_exist() throws Exception {
+
+            // arrange
+
+            when(articlesRepository.findById(eq(7L))).thenReturn(Optional.empty());
+
+            // act
+            MvcResult response = mockMvc.perform(get("/api/articles?id=7"))
+                            .andExpect(status().isNotFound()).andReturn();
+
+            // assert
+
+            verify(articlesRepository, times(1)).findById(eq(7L));
+            Map<String, Object> json = responseToJson(response);
+            assertEquals("EntityNotFoundException", json.get("type"));
+            assertEquals("Articles with id 7 not found", json.get("message"));
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void test_that_logged_in_user_can_get_by_id_when_the_id_does_exist() throws Exception {
+
+            // arrange
+            LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
+
+            Articles article1 = Articles.builder()
+                    .title("Article 1")
+                    .url("https://ucsb-cs156.github.io/s25/lab/team01.html")
+                    .explanation("dining hall menu")
+                    .email("student1@ucsb.edu")
+                    .dateAdded(ldt1)
+                    .build();
+
+
+            when(articlesRepository.findById(eq(7L))).thenReturn(Optional.of(article1));
+
+            // act
+            MvcResult response = mockMvc.perform(get("/api/articles?id=7"))
+                            .andExpect(status().isOk()).andReturn();
+
+            // assert
+
+            verify(articlesRepository, times(1)).findById(eq(7L));
+            String expectedJson = mapper.writeValueAsString(article1);
+            String responseString = response.getResponse().getContentAsString();
+            assertEquals(expectedJson, responseString);
+            
+    }
+
+
 }
