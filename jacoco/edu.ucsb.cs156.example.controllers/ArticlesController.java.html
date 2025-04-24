@@ -94,6 +94,7 @@ import java.time.LocalDateTime;
 <span class="fc" id="L94">        return savedArticle;</span>
     }
 
+
     /**
      * Get a single article by id
      * 
@@ -105,10 +106,10 @@ import java.time.LocalDateTime;
     @GetMapping(&quot;&quot;)
     public Articles getById(
             @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
-<span class="fc" id="L108">        Articles article = articlesRepository.findById(id)</span>
-<span class="fc" id="L109">                .orElseThrow(() -&gt; new EntityNotFoundException(Articles.class, id));</span>
+<span class="fc" id="L109">        Articles article = articlesRepository.findById(id)</span>
+<span class="fc" id="L110">                .orElseThrow(() -&gt; new EntityNotFoundException(Articles.class, id));</span>
 
-<span class="fc" id="L111">        return article;</span>
+<span class="fc" id="L112">        return article;</span>
     }
 
 
@@ -127,18 +128,18 @@ import java.time.LocalDateTime;
             @Parameter(name=&quot;id&quot;) @RequestParam Long id,
             @RequestBody @Valid Articles incoming) {
 
-<span class="fc" id="L130">        Articles article = articlesRepository.findById(id)</span>
-<span class="fc" id="L131">                .orElseThrow(() -&gt; new EntityNotFoundException(Articles.class, id));</span>
+<span class="fc" id="L131">        Articles article = articlesRepository.findById(id)</span>
+<span class="fc" id="L132">                .orElseThrow(() -&gt; new EntityNotFoundException(Articles.class, id));</span>
 
-<span class="fc" id="L133">        article.setTitle(incoming.getTitle());</span>
-<span class="fc" id="L134">        article.setUrl(incoming.getUrl());</span>
-<span class="fc" id="L135">        article.setExplanation(incoming.getExplanation());</span>
-<span class="fc" id="L136">        article.setEmail(incoming.getEmail());</span>
-<span class="fc" id="L137">        article.setDateAdded(incoming.getDateAdded());</span>
+<span class="fc" id="L134">        article.setTitle(incoming.getTitle());</span>
+<span class="fc" id="L135">        article.setUrl(incoming.getUrl());</span>
+<span class="fc" id="L136">        article.setExplanation(incoming.getExplanation());</span>
+<span class="fc" id="L137">        article.setEmail(incoming.getEmail());</span>
+<span class="fc" id="L138">        article.setDateAdded(incoming.getDateAdded());</span>
 
-<span class="fc" id="L139">        articlesRepository.save(article);</span>
+<span class="fc" id="L140">        articlesRepository.save(article);</span>
 
-<span class="fc" id="L141">        return article;</span>
+<span class="fc" id="L142">        return article;</span>
     }
 
 
@@ -156,14 +157,12 @@ import java.time.LocalDateTime;
     @DeleteMapping(&quot;&quot;)
     public Object deleteArticle(
             @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
-<span class="fc" id="L159">        Articles article = articlesRepository.findById(id)</span>
-<span class="fc" id="L160">                .orElseThrow(() -&gt; new EntityNotFoundException(Articles.class, id));</span>
+<span class="fc" id="L160">        Articles article = articlesRepository.findById(id)</span>
+<span class="fc" id="L161">                .orElseThrow(() -&gt; new EntityNotFoundException(Articles.class, id));</span>
 
-<span class="fc" id="L162">        articlesRepository.delete(article);</span>
-<span class="fc" id="L163">        return genericMessage(&quot;Articles with id %s deleted&quot;.formatted(id));</span>
+<span class="fc" id="L163">        articlesRepository.delete(article);</span>
+<span class="fc" id="L164">        return genericMessage(&quot;Articles with id %s deleted&quot;.formatted(id));</span>
     }
-
-
 
 
 }
