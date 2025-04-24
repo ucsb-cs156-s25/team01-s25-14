@@ -50,6 +50,7 @@ public class RecommendationRequestController extends ApiController {
         return requests;
     }
 
+
     @Operation(summary = "Create a new recommendation request")
     @PostMapping("/post") // Use the data in the input parameters to create a new row in the table and return the data as JSON
     public RecommendationRequest postRecommendationRequest(
