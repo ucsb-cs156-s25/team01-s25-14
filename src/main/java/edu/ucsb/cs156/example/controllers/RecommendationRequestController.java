@@ -41,6 +41,8 @@ public class RecommendationRequestController extends ApiController {
     @Autowired
     RecommendationRequestRepository recommendationRequestRepository;
 
+
+    @Operation(summary = "Get all recommendation requests")
     @GetMapping("/all") // get all records in the table and return as a JSON array
     @PreAuthorize("hasRole('ROLE_USER')")
     public Iterable<RecommendationRequest> allRecommendationRequests() {
@@ -48,6 +50,8 @@ public class RecommendationRequestController extends ApiController {
         return requests;
     }
 
+
+    @Operation(summary = "Create a new recommendation request")
     @PostMapping("/post") // Use the data in the input parameters to create a new row in the table and return the data as JSON
     public RecommendationRequest postRecommendationRequest(
             @Parameter(name="requesterEmail") @RequestParam String requesterEmail,
@@ -76,6 +80,18 @@ public class RecommendationRequestController extends ApiController {
 
         return savedRecommendationRequest;
     }
+    
+  
+    @Operation(summary = "Get a single RecommendationRequest by id")
+    @Parameter(name = "id", description = "The id of the RecommendationRequest to retrieve", required = true)
+    @GetMapping("")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public RecommendationRequest getById(@RequestParam Long id) {
+        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
+        return recommendationRequest;
+    }
+
 
     @Operation(summary= "Delete a Recommendation Request")
     @Parameter(name="id", description="the id of the recommendation request to delete", required = true)
@@ -89,5 +105,28 @@ public class RecommendationRequestController extends ApiController {
         recommendationRequestRepository.delete(recommendationRequest);
         return genericMessage("RecommendationRequest with id %s deleted".formatted(id));
     }
+  
 
+    @Operation(summary = "Update a single recommendation request")
+    @Parameter(name="id", description="the id of the recommendation request to update", required = true)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("")
+    public RecommendationRequest updateRecommendationRequest(
+            @Parameter(name="id") @RequestParam Long id,
+            @RequestBody @Valid RecommendationRequest incoming) {
+
+        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
+
+        recommendationRequest.setRequesterEmail(incoming.getRequesterEmail());
+        recommendationRequest.setProfessorEmail(incoming.getProfessorEmail());
+        recommendationRequest.setExplanation(incoming.getExplanation());
+        recommendationRequest.setDateRequested(incoming.getDateRequested());
+        recommendationRequest.setDateNeeded(incoming.getDateNeeded());
+        recommendationRequest.setDone(incoming.getDone());
+
+        recommendationRequestRepository.save(recommendationRequest);
+
+        return recommendationRequest;
+    }
 }
