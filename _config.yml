@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-s25/team01-s25-14
 owner: ucsb-cs156-s25
 repo_name: team01-s25-14
-pull_requests: []
+pull_requests: [{"author":{"id":"MDQ6VXNlcjY1NDY4MjU1","is_bot":false,"login":"karenlyuan","name":"Karen Yuan"},"headRefName":"Karen-ArticlesTable","number":51,"title":"Created database table for Articles called \"articles\"","url":"https://github.com/ucsb-cs156-s25/team01-s25-14/pull/51"}]
