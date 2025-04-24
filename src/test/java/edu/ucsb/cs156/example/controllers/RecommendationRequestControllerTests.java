@@ -142,6 +142,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
             assertEquals(expectedJson, responseString);
     }
 
+
     // Authorization tests for GET /api/RecommendationRequest?id=123 : when record exists, and when it does not exist
     @WithMockUser(roles = { "USER" })
     @Test
@@ -189,6 +190,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
         assertEquals("EntityNotFoundException", json.get("type"));
         assertEquals("RecommendationRequest with id 123 not found", json.get("message"));
         }
+
 
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
