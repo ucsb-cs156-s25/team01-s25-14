@@ -190,6 +190,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
         assertEquals("RecommendationRequest with id 123 not found", json.get("message"));
         }
 
+
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
         public void admin_can_delete_a_recommendation_request() throws Exception {
