@@ -64,10 +64,10 @@ import java.time.LocalDateTime;
     @GetMapping(&quot;&quot;)
     public MenuItemReview getById(
             @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
-<span class="nc" id="L67">        MenuItemReview menuItemReview = menuItemReviewRepository.findById(id)</span>
-<span class="nc" id="L68">                .orElseThrow(() -&gt; new EntityNotFoundException(MenuItemReview.class, id));</span>
+<span class="fc" id="L67">        MenuItemReview menuItemReview = menuItemReviewRepository.findById(id)</span>
+<span class="fc" id="L68">                .orElseThrow(() -&gt; new EntityNotFoundException(MenuItemReview.class, id));</span>
 
-<span class="nc" id="L70">        return menuItemReview;</span>
+<span class="fc" id="L70">        return menuItemReview;</span>
     }
 
      /**
