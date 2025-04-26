@@ -240,7 +240,7 @@ public class HelpRequestControllerTests extends ControllerTestCase {
                                 .teamId("15")
                                 .tableOrBreakoutRoom("Breakout Room")
                                 .requestTime(ldt2)
-                                .explanation("Help")
+                                .explanation("Help Please")
                                 .solved(false)
                                 .build();
 
