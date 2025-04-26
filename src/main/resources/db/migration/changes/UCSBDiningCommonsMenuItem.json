@@ -25,10 +25,12 @@
                     "column": {
                       "constraints": {
                         "primaryKey": true,
-                        "primaryKeyName": "UCSB_DINING_COMMONS_MENU_ITEM_PK"
+                        "primaryKeyName": "UCSB_DINING_COMMONS_MENU_ITEM_PK",
+                        "nullable": false
                       },
                       "name": "ID",
-                      "type": "BIGINT"
+                      "type": "BIGINT",
+                      "autoIncrement": true
                     }
                   },
                   {
