@@ -4,7 +4,7 @@ Instructions: <https://ucsb-cs156.github.io/s25/lab/team01.html>
 
 Deployments:
 
-* [Production Deployment](https://team01.dokku-xx.cs.ucsb.edu)
+* [Production Deployment](https://team01.dokku-14.cs.ucsb.edu)
 * [QA Deployment](https://team01-qa.dokku-14.cs.ucsb.edu)
 
 
