@@ -121,6 +121,57 @@ import java.time.LocalDateTime;
 
 
 
+    /**
+     * Update a single Help Request
+     * 
+     * @param id       id of the help request to update
+     * @param incoming the new help request
+     * @return the updated help request object
+     */
+    @Operation(summary= &quot;Update a single help request&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @PutMapping(&quot;&quot;)
+    public HelpRequest updateHelpRequest(
+            @Parameter(name=&quot;id&quot;) @RequestParam Long id,
+            @RequestBody @Valid HelpRequest incoming) {
+
+<span class="fc" id="L138">        HelpRequest helpRequest = helpRequestRepository.findById(id)</span>
+<span class="fc" id="L139">                .orElseThrow(() -&gt; new EntityNotFoundException(HelpRequest.class, id));</span>
+
+<span class="fc" id="L141">        helpRequest.setRequesterEmail(incoming.getRequesterEmail());</span>
+<span class="fc" id="L142">        helpRequest.setTeamId(incoming.getTeamId());</span>
+<span class="fc" id="L143">        helpRequest.setTableOrBreakoutRoom(incoming.getTableOrBreakoutRoom());</span>
+<span class="fc" id="L144">        helpRequest.setRequestTime(incoming.getRequestTime());</span>
+<span class="fc" id="L145">        helpRequest.setSolved(incoming.getSolved());</span>
+<span class="fc" id="L146">        helpRequest.setExplanation(incoming.getExplanation());</span>
+
+<span class="fc" id="L148">        helpRequestRepository.save(helpRequest);</span>
+
+<span class="fc" id="L150">        return helpRequest;</span>
+    }
+
+
+
+    
+    /**
+     * Delete a Help Request
+     * 
+     * @param id the id of the help request to delete
+     * @return a message indicating the help request was deleted
+     */
+    @Operation(summary= &quot;Delete a HelpRequest&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @DeleteMapping(&quot;&quot;)
+    public Object deleteHelpRequest(
+            @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
+<span class="fc" id="L167">        HelpRequest helpRequest = helpRequestRepository.findById(id)</span>
+<span class="fc" id="L168">                .orElseThrow(() -&gt; new EntityNotFoundException(HelpRequest.class, id));</span>
+
+<span class="fc" id="L170">        helpRequestRepository.delete(helpRequest);</span>
+<span class="fc" id="L171">        return genericMessage(&quot;HelpRequest with id %s deleted&quot;.formatted(id));</span>
+    }
+
+
 
 
 
