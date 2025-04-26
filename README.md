@@ -157,9 +157,3 @@ To run pitest on just one package, use:
 ```
 mvn pitest:mutationCoverage -DtargetClasses=edu.ucsb.cs156.example.controllers.\*
 ```
-
-To run full mutation test coverage, as usual, use:
-
-```
-mvn pitest:mutationCoverage
-```
