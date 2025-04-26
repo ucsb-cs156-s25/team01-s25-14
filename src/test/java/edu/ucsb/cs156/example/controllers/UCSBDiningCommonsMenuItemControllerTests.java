@@ -134,15 +134,15 @@ public class UCSBDiningCommonsMenuItemControllerTests extends ControllerTestCase
                                 .station("DLG")
                                 .build();
 
-                when(ucsbDiningCommonsMenuItemRepository.findById(eq(7L))).thenReturn(Optional.of(ucsbDiningCommonsMenuItem1));
+                when(ucsbDiningCommonsMenuItemRepository.findById(eq(123L))).thenReturn(Optional.of(ucsbDiningCommonsMenuItem1));
 
                 // act
-                MvcResult response = mockMvc.perform(get("/api/ucsbdiningcommonsmenuitem?id=7"))
+                MvcResult response = mockMvc.perform(get("/api/ucsbdiningcommonsmenuitem?id=123"))
                                 .andExpect(status().isOk()).andReturn();
 
                 // assert
 
-                verify(ucsbDiningCommonsMenuItemRepository, times(1)).findById(eq(7L));
+                verify(ucsbDiningCommonsMenuItemRepository, times(1)).findById(eq(123L));
                 String expectedJson = mapper.writeValueAsString(ucsbDiningCommonsMenuItem1);
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
@@ -154,23 +154,23 @@ public class UCSBDiningCommonsMenuItemControllerTests extends ControllerTestCase
 
                 // arrange
 
-                when(ucsbDiningCommonsMenuItemRepository.findById(eq(7L))).thenReturn(Optional.empty());
+                when(ucsbDiningCommonsMenuItemRepository.findById(eq(123L))).thenReturn(Optional.empty());
 
                 // act
-                MvcResult response = mockMvc.perform(get("/api/ucsbdiningcommonsmenuitem?id=7"))
+                MvcResult response = mockMvc.perform(get("/api/ucsbdiningcommonsmenuitem?id=123"))
                                 .andExpect(status().isNotFound()).andReturn();
 
                 // assert
 
-                verify(ucsbDiningCommonsMenuItemRepository, times(1)).findById(eq(7L));
+                verify(ucsbDiningCommonsMenuItemRepository, times(1)).findById(eq(123L));
                 Map<String, Object> json = responseToJson(response);
                 assertEquals("EntityNotFoundException", json.get("type"));
-                assertEquals("UCSBDiningCommonsMenuItem with id 7 not found", json.get("message"));
+                assertEquals("UCSBDiningCommonsMenuItem with id 123 not found", json.get("message"));
         }
 
         @Test
         public void logged_out_users_cannot_get_by_id() throws Exception {
-                mockMvc.perform(get("/api/ucsbdiningcommonsmenuitem?id=7"))
+                mockMvc.perform(get("/api/ucsbdiningcommonsmenuitem?id=123"))
                                 .andExpect(status().is(403)); // logged out users can't get by id
         }
 }
